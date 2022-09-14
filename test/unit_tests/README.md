@@ -1,2 +1,0 @@
-[< Back](../exercises/README.md)
-

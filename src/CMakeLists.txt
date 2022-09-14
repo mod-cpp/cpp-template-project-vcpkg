@@ -1,14 +1,7 @@
-add_executable(pacman main.cpp)
-target_link_libraries(pacman PUBLIC libpacman)
+add_executable(hello main.cpp)
+target_link_libraries(hello PUBLIC libhello)
 
-set_target_properties(pacman
+set_target_properties(hello
         PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-        )
-
-add_custom_command(TARGET pacman POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy
-        ${PROJECT_SOURCE_DIR}/assets/maze.png
-        ${PROJECT_SOURCE_DIR}/assets/sprites32.png
-        ${PROJECT_SOURCE_DIR}/assets/font/retro_font.ttf
-        $<TARGET_FILE_DIR:pacman>)
+)

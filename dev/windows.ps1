@@ -1,5 +1,3 @@
-#  iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/mod-cpp/pacman/main/dev/windows.ps1'))
-
 # Install or update Choco
 $ChocoMissing = $false
 try { choco --version } catch { $ChocoMissing = $true }
@@ -20,4 +18,4 @@ choco install -y visualstudio2022-workload-nativedesktop
 choco install -y cmake.install --installargs 'ADD_CMAKE_TO_PATH=System'
 choco install -y vscode
 
-Write-Host -Foreground green "PacMan development environment install done"
+Write-Host -Foreground green "C++ template development environment install done"

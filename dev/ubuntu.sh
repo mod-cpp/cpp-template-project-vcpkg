@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-#  bash <(curl -s https://raw.githubusercontent.com/mod-cpp/pacman/main/dev/ubuntu.sh)
-
 # install VSCode according to https://code.visualstudio.com/docs/setup/linux
 sudo apt-get install -y wget gpg
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
@@ -14,7 +12,7 @@ sudo apt install -y apt-transport-https
 sudo apt update
 sudo apt install -y code
 
-# PacMan deps
+# Ubuntu development deps
 sudo apt install -y \
 build-essential \
 cmake \
@@ -42,4 +40,4 @@ sudo apt-get install cmake
 # Install Clang last since it isn't strictly needed
 sudo apt install -y clang-12
 
-echo "PacMan development environment install done"
+echo "C++ template development environment install done"

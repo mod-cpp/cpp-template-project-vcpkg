@@ -1,7 +1,7 @@
-#include "Game.hpp"
+#include "hello.hpp"
 
 int main() {
-  pacman::Game game;
-  game.run();
+  hello::print_hello();
+  
   return 0;
 }
