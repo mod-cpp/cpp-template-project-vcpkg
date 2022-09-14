@@ -16,7 +16,7 @@ jobs:
 
     - name: Create vcpkg build folder
       env:
-        vcpkg_project_root: ${{runner.workspace}}/cpp-template-project-vcpkg/build
+        vcpkg_project_root: ${{github.workspace}}/build
       run: |
         mkdir -p ${{ env.vcpkg_project_root }}/vcpkg_installed
         mkdir -p ${{ env.vcpkg_project_root }}/_deps
@@ -24,7 +24,7 @@ jobs:
     - name: Cache vcpkg
       uses: actions/cache@v2
       env:
-        vcpkg_project_root: ${{runner.workspace}}/cpp-template-project-vcpkg/build
+        vcpkg_project_root: ${{github.workspace}}/build
         cache-name: vcpkg-modules
       with:
         path: |
