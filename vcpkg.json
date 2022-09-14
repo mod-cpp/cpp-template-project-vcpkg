@@ -1,0 +1,11 @@
+{
+    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
+    "name": "pacman",
+    "version": "1.0",
+    "builtin-baseline": "af2287382b1991dbdcb7e5112d236f3323b9dd7a",
+    "dependencies": [
+        "sfml",
+        "fmt",
+        "catch2"
+    ]
+}

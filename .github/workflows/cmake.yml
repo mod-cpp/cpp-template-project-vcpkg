@@ -1,0 +1,86 @@
+name: CMake
+
+env:
+  VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: "${{ matrix.configurations.name }} | ${{ matrix.configurations.config-preset }} | ${{ matrix.cmake-build-type }}"
+    runs-on: ${{ matrix.configurations.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        configurations:
+          - name: Ubuntu 20.04
+            os: ubuntu-20.04
+            config-preset: linux-clang
+            build-preset: linux-clang-build
+            test-preset: linux-clang-test
+          - name: Ubuntu 20.04
+            os: ubuntu-20.04
+            config-preset: linux-gcc
+            build-preset: linux-gcc-build
+            test-preset: linux-gcc-test
+          - name: Windows 2022
+            os: windows-2022
+            config-preset: x64-windows
+            build-preset: x64-windows-build
+            test-preset: x64-windows-test
+          - name: Windows 2022
+            os: windows-2022
+            config-preset: x86-windows
+            build-preset: x86-windows-build
+            test-preset: x86-windows-test
+          - name: MacOS 11
+            os: macos-11
+            config-preset: macos
+            build-preset: macos-build
+            test-preset: macos-test
+        cmake-build-type: [Debug, Release]
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: turtlesec-no/get-ninja@1.0.0
+
+    - name: Create vcpkg build folder
+      env:
+        vcpkg_project_root: ${{runner.workspace}}/pacman/build/${{ matrix.configurations.config-preset }}
+      run: |
+        mkdir -p ${{ env.vcpkg_project_root }}/vcpkg_installed
+        mkdir -p ${{ env.vcpkg_project_root }}/_deps
+
+    - name: Cache vcpkg
+      uses: actions/cache@v2
+      env:
+        vcpkg_project_root: ${{runner.workspace}}/pacman/build/${{ matrix.configurations.config-preset }}
+        cache-name: vcpkg-modules
+      with:
+        path: |
+          /home/runner/.cache/vcpkg
+          ${{ env.vcpkg_project_root }}/vcpkg_installed
+          ${{ env.vcpkg_project_root }}/_deps
+        key: ${{ matrix.configurations.os }}-${{ matrix.configurations.config-preset }}-${{ matrix.cmake-build-type }}-${{ hashFiles('vcpkg.json') }}-${{ hashFiles('cmake/vcpkg.cmake') }}
+
+    - name: Install Linux dependencies
+      if: matrix.configurations.os == 'ubuntu-20.04'
+      run: bash ./dev/ubuntu.sh
+
+    - name: Configure CMake
+      shell: bash
+      run: cmake --preset ${{ matrix.configurations.config-preset }} -DCMAKE_BUILD_TYPE=${{ matrix.cmake-build-type }}
+
+    - name: Build
+      shell: bash
+      run: cmake --build --preset ${{ matrix.configurations.build-preset }} --config ${{ matrix.cmake-build-type }}
+
+    - name: Test
+      shell: bash
+      run: ctest --preset ${{ matrix.configurations.test-preset }} -C ${{ matrix.cmake-build-type }} -VV

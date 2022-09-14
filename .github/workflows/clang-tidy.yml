@@ -1,0 +1,48 @@
+name: Clang Tidy
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: turtlesec-no/get-ninja@1.0.0
+
+    - name: Create vcpkg build folder
+      env:
+        vcpkg_project_root: ${{runner.workspace}}/pacman/build
+      run: |
+        mkdir -p ${{ env.vcpkg_project_root }}/vcpkg_installed
+        mkdir -p ${{ env.vcpkg_project_root }}/_deps
+
+    - name: Cache vcpkg
+      uses: actions/cache@v2
+      env:
+        vcpkg_project_root: ${{runner.workspace}}/pacman/build
+        cache-name: vcpkg-modules
+      with:
+        path: |
+          /home/runner/.cache/vcpkg
+          ${{ env.vcpkg_project_root }}/vcpkg_installed
+          ${{ env.vcpkg_project_root }}/_deps
+        key: clang-tidy-cache-${{ hashFiles('vcpkg.json') }}-${{ hashFiles('cmake/vcpkg.cmake') }}
+
+    - name: Install Linux dependencies
+      run: sudo apt-get update && sudo apt-get install -y libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev libudev-dev make ninja-build cmake
+
+    - name: Install clang-tidy
+      run: sudo apt-get install clang-tidy
+
+    - name: Configure CMake
+      working-directory: build
+      run: cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
+
+    - name: Run clang-tidy
+      working-directory: build
+      run: run-clang-tidy
