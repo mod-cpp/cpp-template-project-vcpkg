@@ -16,18 +16,14 @@ sudo apt install -y code
 sudo apt install -y \
 build-essential \
 cmake \
-g++-10 \
+g++ \
 git \
-libgl1-mesa-dev \
-libudev-dev \
-libx11-dev \
-libxi-dev \
-libxrandr-dev \
 ninja-build \
 pkg-config \
 tar \
 unzip \
-zip
+zip \
+curl
 
 # Install up-to-date CMake (https://apt.kitware.com/)
 CODE_NAME=`lsb_release -cs`
@@ -38,6 +34,6 @@ sudo apt-get install kitware-archive-keyring
 sudo apt-get install cmake
 
 # Install Clang last since it isn't strictly needed
-sudo apt install -y clang-12
+sudo apt install -y clang
 
 echo "C++ template development environment install done"

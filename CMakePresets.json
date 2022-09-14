@@ -70,12 +70,13 @@
         },
         {
             "name": "linux-gcc",
-            "description": "Compile On Linux (GCC 10)",
+            "description": "Compile On Linux (GCC)",
             "inherits": "base",
             "generator": "Ninja",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_CXX_COMPILER": "g++-10"
+                "CMAKE_CXX_COMPILER": "g++",
+                "CMAKE_CXX_FLAGS_DEBUG": "-g3"
             },
             "vendor": {
                 "microsoft.com/VisualStudioSettings/CMake/1.0": {
@@ -110,7 +111,8 @@
             "inherits": "base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_CXX_COMPILER": "clang++"
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_CXX_FLAGS_DEBUG": "-g3"
             },
             "vendor": {
                 "microsoft.com/VisualStudioSettings/CMake/1.0": {
@@ -185,7 +187,7 @@
         },
         {
             "name": "linux-gcc-test",
-            "description": "Run tests on Linux (GCC 10)",
+            "description": "Run tests on Linux (GCC)",
             "configurePreset": "linux-gcc",
             "displayName": "linux-test",
             "inherits": [
